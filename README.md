@@ -1,4 +1,4 @@
-# A reverse shell that can be used for botnet etc
+# A reverse shell that can be used for botnet etc with discord webhook notifys for user
 
 TODO
 - [ ] Add commands that  
