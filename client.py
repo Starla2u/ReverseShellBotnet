@@ -30,7 +30,13 @@ def connect_to_server(ip, port):
     except TypeError:
         print(f"Port should be int not {type(port)}")
         os._exit(1)
-    in_socket.connect((ip, port))
+    
+    try:
+      in_socket.connect((ip, port))
+    except ConnectionRefusedError:
+      print("Server has refused connection")
+    except OSError:
+      print("Invalid connection")
     
 
     while True:
