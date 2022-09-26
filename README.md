@@ -1,10 +1,11 @@
 # A reverse shell that can be used for botnet etc with discord webhook notifys for user
 
 TODO
+- [ ] Add classes 
 - [ ] Add file lister and pwd command
 - [ ] Add file uploader  
 - [ ] Add auto run on startup
-- [ ] Hide file  
+- [ ] Hide file
 
 # Usage
 <ol>
