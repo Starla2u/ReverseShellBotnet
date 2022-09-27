@@ -1,4 +1,3 @@
-from xmlrpc.client import Server
 import requests
 import socket
 
@@ -130,6 +129,11 @@ class ServerSetup:
 
 
 if __name__ == "__main__":
+    reque = requests.get("https://discord.com")
+    
+    if reque != 200:
+      DISCORD_NOTF = False
+    
     C_SERVER    = "127.0.0.1"
     C_PORT      = 3334 
     print(o_lo)
