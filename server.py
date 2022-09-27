@@ -131,7 +131,7 @@ class ServerSetup:
 if __name__ == "__main__":
     reque = requests.get("https://discord.com")
     
-    if reque != 200:
+    if reque.status_code != 200:
       DISCORD_NOTF = False
     
     C_SERVER    = "127.0.0.1"
