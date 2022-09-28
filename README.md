@@ -1,8 +1,7 @@
 # A reverse shell that can be used for botnet etc with discord webhook notifys for user
 
 TODO
-- [ ] Make client the listener and server connects to client for full bypass
-- [ ] Add classes 
+- [x] Add classes 
 - [ ] Add file lister and pwd command
 - [ ] Add file uploader  
 - [ ] Add auto run on startup
