@@ -1,4 +1,8 @@
-# A reverse shell that can be used for botnet etc with discord webhook notifys for user
+# A reverse shell that can be used for botnet
+
+Changelog
+- [x] Removed Discord Webhook Notifer
+- [x] Added more commands
 
 TODO
 - [x] Add classes 
