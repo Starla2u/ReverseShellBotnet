@@ -1,10 +1,10 @@
 # A reverse shell that can be used for botnet
 
-Changelog
+## Changelog
 - [x] Removed Discord Webhook Notifer
 - [x] Added more commands
 
-TODO
+## TODO
 - [x] Add classes 
 - [x] Add file lister and pwd command
 - [ ] Add file uploader  
