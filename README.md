@@ -6,6 +6,7 @@ Changelog
 
 TODO
 - [x] Add classes 
+- [ ] Add download function
 - [ ] Add file lister and pwd command
 - [ ] Add file uploader  
 - [ ] Add auto run on startup
