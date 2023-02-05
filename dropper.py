@@ -13,3 +13,5 @@ with open("script.py", "w") as dr:
 
 # Will continue on working later on 
 os.system("cp script.py %temp%")
+os.system("cd %temp%")
+os.system("python3 script.py")
